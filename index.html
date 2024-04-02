@@ -35,11 +35,15 @@
           <div class="modal-body">
             <form>
               <div class="mb-3">
-                <label for="taskName" class="form-label">Task Name</label>
+                <label for="taskName" class="form-label">Task Title</label>
                 <input type="text" class="form-control" id="taskName" required>
               </div>
+              <div class="mb-2">
+                <label for="dueDate" class="form-label">Due Date</label>
+                <input type="text" class="form-control" id="dueDate" required>
+              </div>
               <div class="mb-3">
-                <label for="taskDescription" class="form-label">Description</label>
+                <label for="taskDescription" class="form-label">Task Description</label>
                 <textarea class="form-control" id="taskDescription" rows="3"></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Add Task</button>

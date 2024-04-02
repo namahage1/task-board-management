@@ -44,6 +44,8 @@ $(document).ready(function () {
         // Get the form element
         const taskForm = $('#taskForm');
       
+        const dueDate =  $('#dueDate').datepicker();
+       
         // When the button is clicked, show the modal
         openModalBtn.click(function() {
           modal.modal('show');
