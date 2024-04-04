@@ -116,7 +116,7 @@ function handleDeleteTask(event){
 
   // ? Remove task from the array. There is a method called `filter()` for this that is better suited which we will go over in a later activity. For now, we will use a `forEach()` loop to remove the project.
   tasks.forEach((task) => {
-    if (task.id === taskId) {
+    if (task.id == taskId) {
       tasks.splice(tasks.indexOf(task), 1);
     }
     localStorage.setItem('tasks', JSON.stringify(tasks));
