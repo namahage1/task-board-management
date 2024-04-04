@@ -50,8 +50,6 @@ function renderTaskList() {
   const doneList = $('#done-cards');
   doneList.empty();
 
-//  console.log(taskList)
-
   for(let i=0; i < taskList.length; i++){
     let task = taskList[i];
     console.log(task)
@@ -114,7 +112,7 @@ function handleDeleteTask(event){
   console.log("handleDeleteTask : " + taskId);
   let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-  // ? Remove task from the array. There is a method called `filter()` for this that is better suited which we will go over in a later activity. For now, we will use a `forEach()` loop to remove the project.
+  // Remove task from the array. There is a method called `filter()` for this that is better suited which we will go over in a later activity. For now, we will use a `forEach()` loop to remove the project.
   tasks.forEach((task) => {
     if (task.id == taskId) {
       tasks.splice(tasks.indexOf(task), 1);
@@ -129,24 +127,25 @@ function handleDeleteTask(event){
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
   const taskList = JSON.parse(localStorage.getItem("tasks")) || [];
-  // ? Get the project id from the event
+  // Get the project id from the event
   const taskId = ui.draggable[0].dataset.taskId;
 
   // ? Get the id of the lane that the card was dropped into
   const newStatus = event.target.id;
  
   for (let task of taskList) {
-    // ? Find the project card by the `id` and update the project status.
+    // Find the project card by the `id` and update the project status.
+    //as I mentioned in README file, this taskId is undefined so returns false
 //    if (task.id === taskId) {
       task.status = newStatus;
  //   }
   } 
-  // ? Save the updated tasks array to localStorage (overwritting the previous one) and render the new project data to the screen.
+  // Save the updated tasks array to localStorage (overwritting the previous one) and render the new project data to the screen.
   localStorage.setItem('tasks', JSON.stringify(taskList));
   renderTaskList();
 }
 
-// Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+// when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
  
         // Get the modal element
@@ -178,7 +177,7 @@ $(document).ready(function () {
         }); 
         renderTaskList();
        
-          // ? Make lanes droppable
+          // Make lanes droppable
 
     $('.lane').droppable({
       accept: '.draggable',
