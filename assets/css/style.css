@@ -3,6 +3,9 @@ body {
   font-size: 16px;
 }
 
+.btn-custom:hover {
+  color: #3498db;
+}
 .swim-lanes {
   min-height: 60vh;
 }
@@ -13,4 +16,12 @@ body {
 
 .task-card:hover {
   cursor: grab;
+}
+
+.task-late{
+  background-color: #e74c3c;
+}
+
+.project-today {
+  background-color: #fff5d1;;
 }

@@ -33,14 +33,14 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="taskForm">
               <div class="mb-3">
                 <label for="taskName" class="form-label">Task Title</label>
                 <input type="text" class="form-control" id="taskName" required>
               </div>
               <div class="mb-2">
                 <label for="dueDate" class="form-label">Due Date</label>
-                <input type="text" class="form-control" id="dueDate" required>
+                <input type="text" class="form-control" id="dueDate" required autocomplete="off" >
               </div>
               <div class="mb-3">
                 <label for="taskDescription" class="form-label">Task Description</label>
@@ -51,11 +51,7 @@
           </div>
         </div>
       </div>
-    </div>
-
-
-
-
+    </div><!--cards-->
     <div class="row swim-lanes text-center justify-content-between">
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
@@ -78,7 +74,7 @@
         </div>
         </div>
         <div class="col-12 col-lg-4 d-flex">
-          <div id="done" class="card border-light mb-3 lane flex-grow-1">
+          <div id="done" class="card border-light mb-3 lane flex-grow-1" >
             <div class="card-header bg-white">
               <h2 class="card-title mb-1">Done</h2>
             </div>
