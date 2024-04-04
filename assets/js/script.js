@@ -137,11 +137,6 @@ function handleDrop(event, ui) {
  
   for (let task of taskList) {
     // ? Find the project card by the `id` and update the project status.
-    console.log("______________________________");
-    console.log("task.id : " + task.id);
-    console.log("taskId : " + taskId);
-    console.log("new status : " +newStatus);
-    console.log("______________________________");
 //    if (task.id === taskId) {
       task.status = newStatus;
  //   }
@@ -165,7 +160,10 @@ $(document).ready(function () {
         // Get the form element
         const taskForm = $('#taskForm');
       
-       
+        //reset the field when modal was hiding
+        $('#formModal').on('hidden.bs.modal', function () {
+          $(this).find('form').trigger('reset');
+      })
         // When the button is clicked, show the modal
         openModalBtn.click(function() {
           modal.modal('show');
@@ -177,8 +175,9 @@ $(document).ready(function () {
 
           handleAddTask(event);
 
-        });
+        }); 
         renderTaskList();
+       
           // ? Make lanes droppable
 
     $('.lane').droppable({
