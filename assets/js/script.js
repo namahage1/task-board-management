@@ -4,38 +4,42 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-    const currentTime = dayjs().unix();
-    const rndNum = Math.floor(Math.random() * 1000);
-    return currentTime+rndNum;
+  const currentTime = dayjs().unix();
+  const rndNum = Math.floor(Math.random() * 1000);
+  return currentTime + rndNum;
 }
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
- 
-   const taskCard = $('<div>').addClass('card draggable my-3').attr('task-id',task.id);
 
-   const cardHeader = $('<div>').addClass('card-header h4').text(task.title);
-   const cardBody = $('<div>').addClass('card-body').attr('task-id',task.id);
-   const cardDescription = $('<p>').addClass('card-text').text(task.description);
-   const cardDueDate = $('<p>').addClass('card-text').text(task.due);
-   const cardDeleteBtn = $('<button>')
+  const taskCard = $('<div>').addClass('card draggable my-3').attr('task-id', task.id);
+
+  const cardHeader = $('<div>').addClass('card-header h4').text(task.title);
+  const cardBody = $('<div>').addClass('card-body').attr('task-id', task.id);
+  const cardDescription = $('<p>').addClass('card-text').text(task.description);
+  const cardDueDate = $('<p>').addClass('card-text').text(task.due);
+  const cardDeleteBtn = $('<button>')
     .addClass('btn btn-danger delete')
     .text('Delete')
     .attr('task-id', task.id);
-    
- cardDeleteBtn.on('click', handleDeleteTask);
 
- const taskDueDate = dayjs(task.due, 'DD/MM/YYYY');
- if (dayjs().isSame(taskDueDate, 'day')) {
-  taskCard.addClass('bg-warning text-white');
-} else if (dayjs().isAfter(taskDueDate)) {
-  taskCard.addClass('bg-danger text-white');
-  cardDeleteBtn.addClass('border-light');
-}
-cardBody.append(cardDescription,cardDueDate, cardDeleteBtn);
-taskCard.append(cardHeader,cardBody);
+  cardDeleteBtn.on('click', handleDeleteTask);
 
-return taskCard;
+  if (task.due && task.status !== 'done') {
+    const now = dayjs();
+    const taskDueDate = dayjs(task.due, 'DD/MM/YYYY');
+
+    if (dayjs().isSame(taskDueDate, 'day')) {
+      taskCard.addClass('bg-warning text-white');
+    } else if (dayjs().isAfter(taskDueDate)) {
+      taskCard.addClass('bg-danger text-white');
+      cardDeleteBtn.addClass('border-light');
+    }
+  }
+  cardBody.append(cardDescription, cardDueDate, cardDeleteBtn);
+  taskCard.append(cardHeader, cardBody);
+
+  return taskCard;
 }
 
 // a function to render the task list and make cards draggable
@@ -51,9 +55,9 @@ function renderTaskList() {
   const doneList = $('#done-cards');
   doneList.empty();
 
-  for(let i=0; i < taskList.length; i++){
+  for (let i = 0; i < taskList.length; i++) {
     let task = taskList[i];
-  
+
     if (task.status === 'to-do') {
       todoList.append(createTaskCard(task));
       console.log("to do");
@@ -64,7 +68,7 @@ function renderTaskList() {
       doneList.append(createTaskCard(task));
       console.log("done");
     }
-  
+
   }
   $('.draggable').draggable({
     opacity: 0.7,
@@ -84,7 +88,7 @@ function renderTaskList() {
 }
 
 //a function to handle adding a new task
-function handleAddTask(event){
+function handleAddTask(event) {
   const taskId = generateTaskId();
   const taskName = $('#taskName').val();
   const dueDate = $('#dueDate').val();
@@ -108,11 +112,11 @@ function handleAddTask(event){
 }
 
 // Todo: create a function to handle deleting a task
-function handleDeleteTask(event){
+function handleDeleteTask(event) {
   const taskId = $(this).attr('task-id');
   let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-  // Remove task from the array. There is a method called `filter()` for this that is better suited which we will go over in a later activity. For now, we will use a `forEach()` loop to remove the project.
+  // Remove task from the array. There is a method called `filter()` for this that is better suited which we will go over in a later activity. For now, we will use a `forEach()` loop to remove the task.
   tasks.forEach((task) => {
     if (task.id == taskId) {
       tasks.splice(tasks.indexOf(task), 1);
@@ -126,59 +130,58 @@ function handleDeleteTask(event){
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
   const taskList = JSON.parse(localStorage.getItem("tasks")) || [];
-  // Get the project id from the event
+  // Get the task id from the event
   const taskId = ui.draggable.attr("task-id");
   // ? Get the id of the lane that the card was dropped into
   const newStatus = event.target.id;
- 
+
   for (let task of taskList) {
-    // Find the task card by the `id` and update the project status.
-    //as I mentioned in README file, this taskId is undefined so returns false
+    // Find the task card by the `id` and update the task status.
     if (task.id == taskId) {
       task.status = newStatus;
     }
-  } 
-  // Save the updated tasks array to localStorage (overwritting the previous one) and render the new project data to the screen.
+  }
+  // Save the updated tasks array to localStorage (overwritting the previous one) and render the new task data to the screen.
   localStorage.setItem('tasks', JSON.stringify(taskList));
   renderTaskList();
 }
 
 // when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
- 
-        // Get the modal element
-        const modal = $('#formModal');
-      
-        // Get the button that opens the modal
-        const openModalBtn = $('#openModal');
-      
-        //display datepicker
-        $('#dueDate').datepicker();
-        // Get the form element
-        const taskForm = $('#taskForm');
-      
-        //reset the field when modal was hiding
-        $('#formModal').on('hidden.bs.modal', function () {
-          $(this).find('form').trigger('reset');
-      })
-        // When the button is clicked, show the modal
-        openModalBtn.click(function() {
-          modal.modal('show');
-        });
-      
-        // When the form is submitted, handle the task addition logic
-        taskForm.submit(function(event) {
-          event.preventDefault();
 
-          handleAddTask(event);
+  // Get the modal element
+  const modal = $('#formModal');
 
-        }); 
-        renderTaskList();
-       
-          // Make lanes droppable
+  // Get the button that opens the modal
+  const openModalBtn = $('#openModal');
 
-    $('.lane').droppable({
-      accept: '.draggable',
-      drop: handleDrop,
-    });
+  //display datepicker
+  $('#dueDate').datepicker();
+  // Get the form element
+  const taskForm = $('#taskForm');
+
+  //reset the field when modal was hiding
+  $('#formModal').on('hidden.bs.modal', function () {
+    $(this).find('form').trigger('reset');
+  })
+  // When the button is clicked, show the modal
+  openModalBtn.click(function () {
+    modal.modal('show');
+  });
+
+  // When the form is submitted, handle the task addition logic
+  taskForm.submit(function (event) {
+    event.preventDefault();
+
+    handleAddTask(event);
+
+  });
+  renderTaskList();
+
+  // Make lanes droppable
+
+  $('.lane').droppable({
+    accept: '.draggable',
+    drop: handleDrop,
+  });
 });
